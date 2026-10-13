@@ -140,7 +140,7 @@ window.SIMPLEX_CHALLENGES = [
   {
     id: "e4h-03", topic: "holgura", label: "Equivalencia 4a · interpretación",
     instruction: "Calcula la holgura que queda disponible.",
-    prompt: "La capacidad es 12 y se usan 12x₁ + 4x₂ = 8 unidades.",
+    prompt: "La capacidad es 12 unidades y el consumo real es de 8 unidades.",
     parts: ["x₃ =", { slot: true }, "unidades"],
     answer: ["4"], distractors: ["8", "12", "20"],
     hint: "Holgura = capacidad disponible − cantidad usada.",

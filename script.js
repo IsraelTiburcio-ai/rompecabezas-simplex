@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  const optilabResults = window.OptiLabResults?.create('rompecabezas-simplex');
 
   const RETOS = window.SIMPLEX_CHALLENGES || [];
   const TEMAS = window.SIMPLEX_TOPICS || {};
@@ -445,6 +446,7 @@
     const elapsed = totalElapsed();
     const firstTry = estado.resultados.filter((item) => item?.errors === 0).length;
     const errors = estado.resultados.reduce((sum, item) => sum + (item?.errors || 0), 0);
+    optilabResults?.complete({reason:'completed',correct:firstTry,total:estado.roundTotal,attempts:estado.resultados.reduce((sum,item)=>sum+item.attempts,0),errors,durationMs:Math.round(elapsed),score:estado.puntos});
     const speedBonus = estado.resultados.reduce((sum, item) => sum + (item?.bonus || 0), 0);
     const best = Math.max(leerMejor(estado.roundTotal), estado.puntos);
     try { localStorage.setItem(`rompecabezas-simplex-best-${estado.roundTotal}`, String(best)); } catch (_) { /* Récord local opcional. */ }
@@ -482,6 +484,7 @@
   }
 
   function comenzarPartida() {
+    optilabResults?.start();
     estado.roundTotal = Number($('input[name="round-count"]:checked')?.value || 7);
     estado.retos = escogerRetos(estado.roundTotal);
     estado.indice = 0;
@@ -497,6 +500,7 @@
   function salirPartida() {
     const salir = window.confirm('¿Salir de la partida? Se perderá el progreso de esta sesión.');
     if (!salir) return;
+    optilabResults?.cancel();
     pausarReloj();
     window.clearInterval(estado.tick);
     window.clearTimeout(estado.verifyTimeout);
